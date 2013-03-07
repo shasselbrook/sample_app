@@ -10,8 +10,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      #success
-      #populate flash hash with success message
+      # success
+      # call sign_in from SessionsHelper class, which is included via
+      # base ApplicationController
+      # automatically available to the views 
+      sign_in @user
+      # populate flash hash with success message
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @user
     else
