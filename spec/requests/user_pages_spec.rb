@@ -147,4 +147,15 @@ describe "User Pages" do
       specify { user.reload.email.should == new_email}
     end
   end
+  
+  describe "admin user cannot be deleted" do
+
+    let(:admin) { FactoryGirl.create(:admin)}
+    before do
+      sign_in admin
+      # deleting admin should not really do anything
+      expect { delete user_path(admin)}.to change(User, :count).by(0)
+      
+    end
+  end
 end

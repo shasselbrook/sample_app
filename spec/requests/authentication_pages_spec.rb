@@ -50,7 +50,17 @@ describe "Authentication" do
     
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user)}
+
+      describe "should not show user's links" do
+        before { visit signin_path }
+        it { should_not have_link('Users', href: users_path)}
+        it { should_not have_link('Profile', href: user_path(user))}
+        it { should_not have_link('Settings', href: edit_user_path(user))}
+        it { should_not have_link('Sign out', href: signout_path)}
       
+        it { should have_link('Sign in')}
+      end
+
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
@@ -64,6 +74,15 @@ describe "Authentication" do
           it "should render the desired protected page" do
             page.should have_selector('title', text: 'Edit user')
           end
+        end
+        
+        describe "after signing out and in again" do
+          it "should not forward this time"
+            before do
+              click_link "Sign out"
+              sign_in user
+              page.should_not have_selector('title', text: 'Edit user')
+            end
         end
       end
       

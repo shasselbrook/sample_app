@@ -20,6 +20,10 @@ SampleApp::Application.routes.draw do
   match '/signin', to: 'sessions#new'
   # via: :delete indicates to use HTTP DELETE request
   match '/signout', to: 'sessions#destroy', via: :delete
+  
+  # match inapplicable actions to root page
+  match '/users/:id/create', to: 'static_pages#home'
+  match '/users/:id/new', to: 'static_pages#home'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
