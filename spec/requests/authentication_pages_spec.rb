@@ -77,12 +77,13 @@ describe "Authentication" do
         end
         
         describe "after signing out and in again" do
-          it "should not forward this time"
-            before do
-              click_link "Sign out"
-              sign_in user
-              page.should_not have_selector('title', text: 'Edit user')
-            end
+          before do
+            click_link "Sign out"
+            sign_in user
+          end
+          it "should not forward this time" do
+            page.should_not have_selector('title', text: 'Edit user')
+          end
         end
       end
       
@@ -102,6 +103,19 @@ describe "Authentication" do
       describe "submitting to the update action" do
         before { put user_path(user)}
         specify { response.should redirect_to(signin_path)}
+      end
+      
+      describe "in the Microposts controller" do
+        
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+        
+        describe "submitting to the destroy action" do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { response.should redirect_to(signin_path) }
+        end
       end
     end
     
